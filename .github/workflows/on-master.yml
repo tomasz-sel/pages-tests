@@ -19,3 +19,4 @@ jobs:
         with:
           folder: docs/
           clean-exclude: pr-preview/
+          force: false
