@@ -6,6 +6,10 @@ inputs:
     description: "Version of hugo"
     required: true
     default: "0.120.4"
+  base_url:
+    description: "Base url of generated files"
+    required: true
+    default: ${{ steps.deployment.outputs.page_url }}
 runs:
   using: composite
   steps:
@@ -19,4 +23,4 @@ runs:
       run: npm install -C themes/docsy && npm install postcss-cli autoprefixer
     - name: Build hugo docs/
       shell: bash
-      run: hugo --gc --minify
+      run: hugo -b ${{ inputs.base_url }} --gc --minify
