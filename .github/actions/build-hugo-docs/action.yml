@@ -25,6 +25,9 @@ runs:
     - name: Install npm dependencies
       shell: bash
       run: npm install -C themes/docsy && npm install postcss-cli autoprefixer
+    - uses: actions/setup-go@v4
+      with:
+        go-version: '1.21.4'
     - name: Build hugo docs/
       shell: bash
       run: |
