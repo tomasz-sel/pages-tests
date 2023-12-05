@@ -1,0 +1,37 @@
+---
+name: build-hugo-docs
+description:  Building static content with hugo
+inputs:
+  hugo_version:
+    description: "Version of hugo"
+    required: true
+    default: "0.120.4"
+  base_path:
+    description: "Base url of generated files"
+    required: true
+    default: /
+  custom_domain:
+    description: "Custom domain"
+    required: false
+    default: ""
+runs:
+  using: composite
+  steps:
+    - name: Get hugo binary
+      shell: bash
+      run: >
+        wget -O- https://github.com/gohugoio/hugo/releases/download/v${{ inputs.hugo_version }}/hugo_extended_${{ inputs.hugo_version }}_linux-amd64.tar.gz
+        | tar xvz -C /usr/local/bin hugo
+    - name: Install npm dependencies
+      shell: bash
+      run: npm install -C themes/docsy && npm install postcss-cli autoprefixer
+    - name: Build hugo docs/
+      shell: bash
+      run: |
+        if [ -z "${{ inputs.custom_domain}}" ]; then
+          org=$(echo "${{ github.repository }}" | cut -d "/" -f 1)
+          pages_base_url="https://${org}.github.io/${GITHUB_REPOSITORY#*/}${{ inputs.base_path }}"
+        else
+          pages_base_url="https://${{ inputs.custom_domain }}${{ inputs.base_path }}"
+        fi
+        hugo -b ${pages_base_url} --gc --minify

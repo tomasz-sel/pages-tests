@@ -1,7 +1,8 @@
 name: Deploy static content to Pages
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
@@ -14,8 +15,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          submodules: 'true'
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: docs/
+          folder: public/
           clean-exclude: pr-preview/
+          force: false
