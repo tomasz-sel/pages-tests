@@ -32,6 +32,6 @@ runs:
           org=$(echo "${{ github.repository }}" | cut -d "/" -f 1)
           pages_base_url="https://${org}.github.io/${GITHUB_REPOSITORY#*/}${{ inputs.base_path }}"
         else
-          pages_base_url="https://${{ inputs.custom_domain }}${{ inputs.base_path }}"
+          pages_base_url="https://${{ inputs.custom_domain }}/${GITHUB_REPOSITORY#*/}${{ inputs.base_path }}"
         fi
         hugo -b ${pages_base_url} --gc --minify
